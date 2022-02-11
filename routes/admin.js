@@ -22,4 +22,8 @@ router.get("/categorias", (req, res) => {
     })
 });
 
+router.get("/categorias/add", (req, res) => {
+    res.send("admin/addcategorias");
+});
+
 module.exports = router;

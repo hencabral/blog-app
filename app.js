@@ -6,6 +6,7 @@ const app = express();
 const admin = require('./routes/admin');
 const path = require('path');
 const session = require('express-session');
+const flash = require('connect-flash');
 
 const PORT = 8081;
 
@@ -15,6 +16,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+app.use(flash());
 
 app.engine('handlebars', handlebars.engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');

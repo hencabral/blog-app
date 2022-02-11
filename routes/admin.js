@@ -23,7 +23,7 @@ router.get("/categorias", (req, res) => {
 });
 
 router.get("/categorias/add", (req, res) => {
-    res.send("admin/addcategorias");
+    res.render("admin/addcategorias");
 });
 
 module.exports = router;

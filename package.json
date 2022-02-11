@@ -9,6 +9,7 @@
   "author": "Luiz Henrique Cabral Zanella",
   "license": "ISC",
   "dependencies": {
+    "connect-flash": "^0.1.1",
     "express": "^4.17.2",
     "express-handlebars": "^6.0.2",
     "express-session": "^1.17.2"

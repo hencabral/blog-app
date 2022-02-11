@@ -5,8 +5,16 @@ const handlebars = require('express-handlebars');
 const app = express();
 const admin = require('./routes/admin');
 const path = require('path');
+const session = require('express-session');
 
 const PORT = 8081;
+
+//Sessão
+app.use(session({
+    secret: "cursodenode",
+    resave: true,
+    saveUninitialized: true
+}));
 
 app.engine('handlebars', handlebars.engine({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');

@@ -61,6 +61,18 @@ router.post("/categorias/nova", (req, res) => {
             res.redirect("/admin")
         });
     }
-})
+});
+
+router.get("/categorias/edit/:id", (req, res) => {
+    
+    Categoria.findOne({_id: req.params.id}).lean()
+    .then((categoria) => {
+        res.render("admin/editcategorias", {categoria: categoria});
+    })
+    .catch((err) => {
+        req.flash("error_msg", "Categoria não localizada");
+        res.redirect("admin/categorias");
+    });
+});
 
 module.exports = router;

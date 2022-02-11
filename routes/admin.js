@@ -27,7 +27,7 @@ router.get("/categorias/add", (req, res) => {
 });
 
 router.post("/categorias/nova", (req, res) => {
-    
+
     //Validando formulario cadastro de categoria
     var erros = [];
 
@@ -46,7 +46,20 @@ router.post("/categorias/nova", (req, res) => {
     if(erros.length > 0){
         res.render("admin/addcategorias", {erros: erros});
     }else{
-        res.send("Formulário validado!");
+        const novaCategoria = {
+            nome: req.body.nome,
+            slug: req.body.slug
+        }
+    
+        new Categoria(novaCategoria).save()
+        .then(() => {
+            req.flash("success_msg", "Categoria criada com sucesso!");
+            res.redirect("/admin/categorias");
+        })
+        .catch((err) => {
+            req.flash("error_msg", "houve um erro ao criar a categoria, tente novamente");
+            res.redirect("/admin")
+        });
     }
 })
 

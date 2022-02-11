@@ -5,4 +5,8 @@ router.get("/", (req, res) => {
     res.render('admin/index');
 });
 
+router.get("/posts", (req, res) => {
+    res.send("Página de posts");
+});
+
 module.exports = router;

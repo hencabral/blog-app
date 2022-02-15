@@ -139,7 +139,18 @@ router.get("/categorias/deletar/:id", (req, res) => {
 });
 //Rota para exibir postagens
 router.get("/postagens", (req, res) => {
-    res.send("admin/postagens");
+    res.render("admin/postagens");
+});
+
+router.get("/postagens/add", (req, res) => {
+    Categoria.find().lean()
+    .then((categorias) => {
+        res.render("admin/addpostagens", {categorias: categorias});
+    })
+    .catch((err) => {
+        req.flash("error_msg", "Categorias não localizadas");
+        redirect("/admin/postagens");
+    });
 });
 
 module.exports = router;

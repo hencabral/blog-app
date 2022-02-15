@@ -19,7 +19,7 @@ router.get("/categorias", (req, res) => {
     }).catch((err) => {
         req.flash("error_msg", "Houve um erro ao listar as categorias")
         res.redirect("/admin");
-    })
+    });
 });
 
 router.get("/categorias/add", (req, res) => {
@@ -123,7 +123,7 @@ router.post("/categorias/edit", (req, res) => {
         req.flash("error_msg", "Erro ao editar a categoriaa");
         res.redirect("/admin/categorias");
     })
-})
+});
 
 //Rota para deletar categoria
 router.get("/categorias/deletar/:id", (req, res) => {
@@ -135,7 +135,11 @@ router.get("/categorias/deletar/:id", (req, res) => {
     .catch((err) => {
         req.flash("error_msg", "Erro ao deletar a categoriaa");
         res.redirect("/admin/categorias");
-    })
-})
+    });
+});
+//Rota para exibir postagens
+router.get("/postagens", (req, res) => {
+    res.send("admin/postagens");
+});
 
 module.exports = router;

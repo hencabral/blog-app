@@ -15,7 +15,7 @@ const Postagem = new Schema({
         type: String,
         required: true
     },
-    coteudo:{
+    conteudo:{
         type: String,
         required: true
     },

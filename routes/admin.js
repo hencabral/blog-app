@@ -306,4 +306,17 @@ router.post("/postagens/edit", (req, res) => {
     });
 });
 
+//Rota para deletar postagem
+router.get("/postagens/deletar/:id", (req, res) => {
+    Postagem.deleteOne({_id: req.params.id}).lean()
+    .then(() => {
+        req.flash("success_msg", "Postagem deletada com sucesso!");
+        res.redirect("/admin/postagens");  
+    })
+    .catch((err) => {
+        req.flash("error_msg", "Erro ao deletar a Postagem");
+        res.redirect("/admin/postagens");
+    });
+});
+
 module.exports = router;

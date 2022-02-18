@@ -215,4 +215,24 @@ router.post("/postagens/nova", (req, res) => {
     }
 });
 
+router.get("/postagens/edit/:id", (req, res) =>{
+    Postagem.findOne({_id: req.params.id}).lean()
+    .then((postagem) => {
+
+        Categoria.find().lean()
+        .then((categorias) => {
+
+            res.render("admin/editpostagens", {categorias: categorias, postagem: postagem});
+        })
+        .catch((err) => {
+            req.flash("error_msg", "Categoria não localizada");
+            res.redirect("/admin/postagens");
+        });
+    })
+    .catch((err) => {
+        req.flash("error_msg", "Postagem não localizada");
+        res.redirect("/admin/postagens");
+    });
+});
+
 module.exports = router;

@@ -235,4 +235,75 @@ router.get("/postagens/edit/:id", (req, res) =>{
     });
 });
 
+router.post("/postagens/edit", (req, res) => {
+    
+    Postagem.findOne({_id: req.body.id})
+    .then((postagem) => {
+
+        //Validando formulario edição de postagem
+        var erros = [];
+
+        if(!req.body.titulo || typeof req.body.titulo == undefined || req.body.titulo == null){
+            erros.push({texto: "Título inválido"});
+        }
+
+        if(!req.body.slug || typeof req.body.slug == undefined || req.body.slug == null){
+            erros.push({texto: "Slug inválido"});
+        }
+
+        if(!req.body.descricao || typeof req.body.descricao == undefined || req.body.descricao == null){
+            erros.push({texto: "Descrição inválida"});
+        }
+
+        if(!req.body.conteudo || typeof req.body.conteudo == undefined || req.body.conteudo == null){
+            erros.push({texto: "Conteúdo inválido"});
+        }
+
+        if(req.body.categoria == "0"){
+            erros.push({texto: "Categoria inválida, registre uma categoria"});
+        }
+
+        if(erros.length > 0){
+
+            Postagem.findOne({ _id: req.body.id }).lean().then((postagem) => {
+                Categoria.find().lean()
+                .then((categorias) => {
+                    res.render("admin/editpostagens", {categorias: categorias, postagem: postagem, erros: erros});
+                })
+                .catch((err) => {
+                    req.flash("error_msg", "Houve um erro ao carregar as categorias")
+                    res.redirect("admin/postagens")
+                })
+            }).catch((err) => {
+                req.flash("error_msg", "Houve um erro ao carregar a postagem")
+                res.redirect("admin/postagens")
+            });
+
+        }else{
+
+            postagem.titulo = req.body.titulo;
+            postagem.slug = req.body.slug;
+            postagem.descricao = req.body.descricao;
+            postagem.conteudo = req.body.conteudo;
+            postagem.categoria = req.body.categoria;
+
+            postagem.save()
+            .then(() => {
+                req.flash("success_msg", "Postagem editada com sucesso!");
+                res.redirect("/admin/postagens");
+            })
+            .catch((err) => {
+                req.flash("error_msg", "Erro ao editar postagem");
+                res.redirect("/admin/postagens");
+            });
+        }
+         
+    })
+    .catch((err) => {
+        console.log(err);
+        req.flash("error_msg", "Erro ao editar a postagem");
+        res.redirect("/admin/postagens");
+    });
+});
+
 module.exports = router;

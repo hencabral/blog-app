@@ -9,6 +9,8 @@ const path = require('path');
 const session = require('express-session');
 const flash = require('connect-flash');
 const mongoose = require('mongoose');
+require("./models/Postagem");
+const Postagem = mongoose.model("postagens")
 
 const PORT = 8081;
 
@@ -50,6 +52,17 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //Rotas
 app.use('/admin', admin);
+
+app.get('/', (req, res) => {
+    Postagem.find().populate("categoria").sort({data: "desc"}).lean()
+    .then((postagens) => {
+        res.render('index', {postagens: postagens});
+    })
+    .catch((err) => {
+        req.flash("error_msg", "Erro ao exibir postagens");
+        res.redirect("/404");
+    })
+})
 
 app.listen(PORT, () => {
     console.log("Servidor rodando na porta: " + PORT);

@@ -42,9 +42,9 @@ const uri = "mongodb+srv://root:root@test.m7oxe.mongodb.net/blogApp?retryWrites=
 mongoose.Promise = global.Promise;
 mongoose.connect(uri)
 .then(() => {
-    console.log("mongoDB Conectado....")
+    console.log("mongoDB Conectado....");
 }).catch((err) => {
-    console.log("Houve um erro ao se conectar ao mongoBD: " + err)
+    console.log("Houve um erro ao se conectar ao mongoBD: " + err);
 });
 
 //Public
@@ -61,9 +61,20 @@ app.get('/', (req, res) => {
     .catch((err) => {
         req.flash("error_msg", "Erro ao exibir postagens");
         res.redirect("/404");
+    });
+});
+
+app.get('/postagem/:slug', (req, res) => {
+    Postagem.findOne({slug: req.params.slug}).lean()
+    .then((postagem) => {
+        res.render('postagem/index', {postagem: postagem});
     })
-})
+    .catch((err) => {
+        req.flash("error_msg", "Erro ao exibir postagem");
+        res.redirect("/404");
+    });
+});
 
 app.listen(PORT, () => {
     console.log("Servidor rodando na porta: " + PORT);
-})
+});

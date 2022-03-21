@@ -13,7 +13,9 @@ require("./models/Postagem");
 const Postagem = mongoose.model("postagens");
 const usuarios = require('./routes/usuario');
 const passport = require('passport');
-require('./config/auth')(passport)
+require('./config/auth')(passport);
+require("./models/Categoria");
+const Categoria = mongoose.model("categorias");
 
 const PORT = 8081;
 
@@ -80,6 +82,40 @@ app.get('/postagem/:slug', (req, res) => {
     .catch((err) => {
         req.flash("error_msg", "Erro ao exibir postagem");
         res.redirect("/404");
+    });
+});
+
+app.get('/categorias', (req, res) => {
+    Categoria.find().lean()
+    .then((categorias) => {
+        res.render('categorias/index', {categorias: categorias});
+    })
+    .catch((err) => {
+        req.flash("error_msg", "Houve um erro ao listar as categorias");
+        res.redirect('/');
+    });
+});
+
+app.get('/categorias/:slug', (req, res) => {
+    Categoria.findOne({slug: req.params.slug}).lean()
+    .then((categoria) => {
+        if(categoria){
+            Postagem.find({categoria: categoria._id}).lean()
+        .then((postagens) => {
+            res.render('categorias/postagens', {postagens: postagens, categoria: categoria});
+        })
+        .catch((err) => {
+            req.flash("error_msg", "Postagens não localizadas");
+            res.redirect('/');
+        })
+        }else{
+            req.flash("error_msg", "Essa categoria não existe");
+            res.redirect('/');
+        }
+    })
+    .catch((err) => {
+        req.flash("error_msg", "Houve um erro ao buscar a categoria");
+        res.redirect('/');
     });
 });
 

@@ -10,7 +10,8 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const mongoose = require('mongoose');
 require("./models/Postagem");
-const Postagem = mongoose.model("postagens")
+const Postagem = mongoose.model("postagens");
+const usuarios = require('./routes/usuario');
 
 const PORT = 8081;
 
@@ -52,6 +53,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 //Rotas
 app.use('/admin', admin);
+app.use('/usuarios', usuarios);
 
 app.get('/', (req, res) => {
     Postagem.find().populate("categoria").sort({data: "desc"}).lean()

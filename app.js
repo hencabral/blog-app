@@ -17,7 +17,7 @@ require('./config/auth')(passport);
 require("./models/Categoria");
 const Categoria = mongoose.model("categorias");
 
-const PORT = 8081;
+const PORT = process.env.PORT || 8081;
 
 //Sessão
 app.use(session({
